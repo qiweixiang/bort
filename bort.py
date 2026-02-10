@@ -163,7 +163,7 @@ if 'message' not in st.session_state:
 
 # 大标题
 st.title("AI智能回复")
-# st.logo("C:\\Users\\60566\\Desktop\\u=2892873496,2351386762&fm=253&gp=0.jpg")
+st.logo("C:\\Users\\60566\\Desktop\\u=2892873496,2351386762&fm=253&gp=0.jpg")
 
 for i in st.session_state['message']:
     if i['role'] == 'user':
