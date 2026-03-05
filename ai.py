@@ -3,11 +3,11 @@ from openai import OpenAI
 
 # 调用deepseek api
 client = OpenAI(
-    api_key='sk-088d1435f3fc43079010da5e0cb82c96',
-    base_url="https://api.deepseek.com")
+    api_key='sk-4e9216382336465a9c8ce0120806c4ec',
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1")
 
 response = client.chat.completions.create(
-    model="deepseek-chat",
+    model="qwen-plus",
     messages=[
         # {"role": "system", "content": "你是一个数学家"},
         # {"role": "user", "content": "十二个苹果分给三个人怎么均分"},
@@ -17,7 +17,7 @@ response = client.chat.completions.create(
         # {"role": "user", "content": "那四个人呢"},
 
         {"role": "system", "content": "你是一个喜剧演员，回答的幽默风趣一点"},
-        {"role": "user", "content": "怎么评论现在的电车的电池"},
+        {"role": "user", "content": "你是谁"},
     ],
     stream=True
 )
@@ -28,7 +28,7 @@ for chunk in response:
     delta = chunk.choices[0].delta
     if delta.content:
         print(delta.content, end="", flush=True)  # 实时打印
-print(response.json())
+# print(response.json())
 print(response.choices[0].message.content)
 
 # from ollama import chat

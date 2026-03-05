@@ -194,11 +194,11 @@ if prompt:
     d = {"role": "user", "content": prompt}
     all.append(d)
     client = OpenAI(
-        api_key='sk-088d1435f3fc43079010da5e0cb82c96',
-        base_url="https://api.deepseek.com")
+        api_key='sk-4e9216382336465a9c8ce0120806c4ec',
+        base_url="https://dashscope.aliyuncs.com/compatible-mode/v1")
 
     response = client.chat.completions.create(
-        model="deepseek-chat",
+        model="qwen-plus",
         messages=[
             {"role": "system", "content": sys_prompt.format(st.session_state['nick_name'], st.session_state['personality'])},
             # {"role": "user", "content": prompt},

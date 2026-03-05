@@ -459,6 +459,8 @@ if __name__ == '__main__':
     # print(ut.titleaa)
     # ut.my.add(1, 2)
 
-    from util import jiajia
-
-    jiajia()
+    # from util import jiajia
+    #
+    # jiajia()
+    from util.my import add
+    add(1,2)
