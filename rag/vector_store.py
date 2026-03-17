@@ -11,6 +11,9 @@ class VectorStoreService:
             persist_directory="./chroma" #持久化目录
         )
 
+    # 这是将向量库的检索功能封装为一个Runnable 就是为了入链
+    # vector_store.get_retriver().invoke("新入职的试用期是多久")  这样就相当于调用之前检索向量库功能
+    # vect.similarity_search(query="范增是谁", k=1)
     def get_retriver(self):
         return self.vector_store.as_retriever(search_kwargs={"k": 1})
 

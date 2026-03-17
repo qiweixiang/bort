@@ -19,22 +19,22 @@ class FileChatMessageHistory(BaseChatMessageHistory):
 
     def get_memory_chain(self, chain, input_messages_key, history_messages_key):
         return RunnableWithMessageHistory(
-                   chain,                               #原始链
-                   FileChatMessageHistory.get_history,                    #根据sesession_id获取历史会话 这个很重要的设计
-                   input_messages_key = input_messages_key,     #当前问题的key
-                   history_messages_key= history_messages_key  #历史会话的key
+                   chain,                                      #原始链
+                   FileChatMessageHistory.get_history,         #根据sesession_id获取历史会话 这个很重要的设计
+                   input_messages_key = input_messages_key,    #当前问题的key  也就是说调用这个链的时候传入的参数：例如  invoke({"question":"小明有一个苹果"}
+                   history_messages_key= history_messages_key  #历史会话的key   这是把历史会话封装在这个key里面
                )
 
+    # 获取历史会话
     @staticmethod
     def get_history(session_id):
-        print("get_history", session_id)
         store = {}
         if session_id not in store:
-            # 基于文件的本地存储
+            # 基于文件的本地存储 创建一个基于文件的会话存储
             store[session_id] = FileChatMessageHistory(f"./mysession/{session_id}.json", session_id)
         return store[session_id]
 
-
+    # 获取历史会话
     @property
     def messages(self) -> list[BaseMessage]:
         try:
@@ -48,14 +48,13 @@ class FileChatMessageHistory(BaseChatMessageHistory):
         except FileNotFoundError:
             return []
 
+    # 添加历史会话
     def add_messages(self, messages: Sequence[BaseMessage]) -> None:
         all_messages = list(self.messages)  # Existing messages
         all_messages.extend(messages)  # Add new messages
 
-        print("add_messages", self.storage_path)
         serialized = [message_to_dict(message) for message in all_messages]
         file_path = os.path.join(self.storage_path)
-        print("file_path", file_path)
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(serialized, f)

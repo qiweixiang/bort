@@ -3,7 +3,6 @@ import os
 from langchain_chroma import Chroma
 from langchain_community.embeddings import DashScopeEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from sympy.physics.units.definitions.unit_definitions import kN
 
 import rag_config as config
 import hashlib

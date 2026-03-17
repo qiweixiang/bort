@@ -60,6 +60,7 @@ class RagService :
         new_data['context'] = old_data['context']
         return new_data
 
+    # 获取执行链
     def get_chain(self, session_id) :
         chain =  {
             # "question": self.get_quesiton_from_memery,
@@ -67,13 +68,20 @@ class RagService :
             # "chat_history": self.get_history
             # 上面这种是我自己的想法
 
+             # RunnablePassthrough就是个占位的  类似于一个函数 输入啥就返回啥
              "question": RunnablePassthrough(),
              "context": self.print_promopt | self.vectorStoreService.get_retriver() | self.format_doc,
              # "chat_history": self.get_history
         }  | RunnableLambda(self.revever_data) | self.prompt_template  | self.model | StrOutputParser()
 
+        # 获取带有历史记忆功能的一个链
         fcm = MessageHistoryService.FileChatMessageHistory(f"./mysession/{session_id}.json", "user_oo1")
-        return  fcm.get_memory_chain(chain,
+
+        # 总的来讲这个历史会话链会返回一个字典内容是{"question":"小明有一个苹果","chat_history":[]},然后把这个字典当做原链的第一个位置传入 继续执行
+        # 那这里这个链举例子 就是把会话链生成的字典  传入chain的字典的每个key
+        # 这就是历史会话链的作用
+        return  fcm.get_memory_chain(
+            chain, #这是原链
             "question",
             "chat_history")
 
@@ -83,13 +91,12 @@ class RagService :
 if __name__ == '__main__':
     session_config = {
         "configurable":{
-            "session_id":"user_oo1",
-            "file_name": "aa"
+            "session_id":"user_oo1"
         }
     }
     rag = RagService()
-    # print(rag.get_chain('user_oo1').invoke({"question":"小明有一个苹果"}, config=session_config))
-    # print("="*30)
-    # print(rag.get_chain('user_oo1').invoke({"question": "小明有两个梨"}))
-    # print("=" * 30)
-    # print(rag.get_chain('user_oo1').invoke({"question": "小明一共有几个水果"}))
+    print(rag.get_chain('user_oo1').invoke({"question":"小明有一个苹果"}, config=session_config))
+    print("="*30)
+    print(rag.get_chain('user_oo1').invoke({"question": "小明有两个梨"}, config=session_config))
+    print("=" * 30)
+    print(rag.get_chain('user_oo1').invoke({"question": "小明一共有几个水果"}, config=session_config))
