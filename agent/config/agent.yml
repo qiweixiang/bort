@@ -1,1 +1,2 @@
 chat_model_name: qwen-max
+external_data_path: data/external/records.csv

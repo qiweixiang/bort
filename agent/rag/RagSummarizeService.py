@@ -31,7 +31,6 @@ class RagSummarizeService:
        return self.retriver.invoke(query)
 
     def rag_summarize(self, question):
-
        content = ''
        counter = 0
        documtnts :list[Document] = self.retriver_doc(question)
